@@ -36,6 +36,21 @@ test('scan.js and its imports use no Node-only modules, so it runs in a browser'
   for (const f of ['src/scan.js', 'src/rules.js', 'src/rules-data.js']) assert.doesNotMatch(readFileSync(join(ROOT, f), 'utf8'), /from ['"]node:|require\(/, f);
 });
 
+test('scan.js needs no Node globals: base64 still decodes without Buffer or process', async () => {
+  const { scan } = await import('../src/scan.js');
+  const page = readFileSync(join(ROOT, 'test/fixtures/base64.html'), 'utf8');
+  const hidden = ['Buffer', 'process'].map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]);
+  let r;
+  try {
+    for (const [k] of hidden) delete globalThis[k];
+    r = scan(page);
+  } finally {
+    for (const [k, d] of hidden) Object.defineProperty(globalThis, k, d);
+  }
+  assert.equal(r.level, 'stop');
+  assert.ok(r.findings.some((f) => /base64/.test(f.where)), 'found through base64');
+});
+
 test('docs/rules.md is generated from the current rules (run: npm run sync-rules)', () => {
   const doc = readFileSync(join(ROOT, 'docs/rules.md'), 'utf8');
   const rules = JSON.parse(readFileSync(join(ROOT, 'rules/rules.json'), 'utf8'));

@@ -89,10 +89,18 @@ export function segments(input) {
 
 const inside = (ranges, i) => ranges.some(([a, b]) => i >= a && i < b);
 
+// atob + TextDecoder, not Buffer: the same code runs in Node and in a browser. A
+// dangling sixth bit (length % 4 == 1) is dropped, as Buffer does, not an error.
+function fromBase64(b64) {
+  let t = b64.replace(/=+$/, '');
+  if (t.length % 4 === 1) t = t.slice(0, -1);
+  return new TextDecoder().decode(Uint8Array.from(atob(t), (c) => c.charCodeAt(0)));
+}
+
 function withBase64(out, s) {
   for (const m of s.matchAll(/(?<![A-Za-z0-9+/=])[A-Za-z0-9+/]{40,}={0,2}(?![A-Za-z0-9+/=])/g)) {
     let decoded;
-    try { decoded = Buffer.from(m[0], 'base64').toString('utf8'); } catch { continue; }
+    try { decoded = fromBase64(m[0]); } catch { continue; }
     const printable = decoded.replace(/[^\x20-\x7E\n\t]/g, '').length / Math.max(decoded.length, 1);
     if (printable > 0.95 && /[a-z]{3,} [a-z]{3,}/i.test(decoded)) {
       out.push({ text: decoded, hidden: true, how: ['base64'], where: 'base64-encoded text', offset: m.index });
