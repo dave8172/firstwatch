@@ -33,7 +33,7 @@ test('src/rules-data.js carries the same rules (run: npm run sync-rules)', async
 });
 
 test('scan.js and its imports use no Node-only modules, so it runs in a browser', () => {
-  for (const f of ['src/scan.js', 'src/rules.js', 'src/rules-data.js']) assert.doesNotMatch(readFileSync(join(ROOT, f), 'utf8'), /from ['"]node:|require\(/, f);
+  for (const f of ['src/scan.js', 'src/rules.js', 'src/rules-data.js', 'src/gate.js']) assert.doesNotMatch(readFileSync(join(ROOT, f), 'utf8'), /from ['"]node:|require\(/, f);
 });
 
 test('scan.js needs no Node globals: base64 still decodes without Buffer or process', async () => {

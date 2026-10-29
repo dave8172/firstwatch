@@ -127,6 +127,7 @@ On 2026-10-29:
 
 - **Test pages** ([test/fixtures](test/fixtures)): all 7 attacks stopped (HTML comment, white 1px text, Unicode tag characters, base64, zero-width characters, a markdown image that leaks data, a hidden order to edit CLAUDE.md). None of the 6 harmless pages stopped: API docs that say "include your API key", an install page with `curl … | sh`, an llms.txt, a bank page saying "our agents will never ask…".
 - **Requests written to a person** (0.2.0): a held-out set of 10 attacks in mail and messages (reply with a password, send every file, delete everything) and 10 harmless lookalikes, written before the rules were finished: all 10 attacks stopped, none of the 10 lookalikes stopped. Same author as the rules, so the real-site check below is the independent one ([test/heldout](test/heldout)).
+- **Inside a working agent** (0.2.0): an email agent on Claude Haiku 5.5 under seven attacks, 70 runs with firstwatch and 70 without. Task done 99% with firstwatch, 92% without; 0 harmful attempts either way; every attack the agent read was stopped. An earlier warning made the agent drop its task; this is why it changed ([docs/agent-study.md](docs/agent-study.md)).
 - **18 real sites, as raw HTML** (MDN, Python docs, GitHub, BBC, Stack Overflow, Stripe's API key docs, React, Vercel, npm, Hacker News, PayPal, GitHub docs, brew.sh, an llms.txt, and four articles about prompt injection): one stop, and it was real. A security blog quotes a payload hidden in invisible Unicode tag characters, and firstwatch decoded it. The articles about prompt injection gave notes. Re-run it yourself: `npm run check-pages`.
 - **Node and Python agree** on every test page and every one of the 18 sites: same level, same rules, same number of findings.
 - **Live in Claude Code:** the run quoted above. On the next turn, a shell command was held for approval in both default and auto permission modes.
@@ -168,6 +169,7 @@ Ideas and votes: [Discussions](https://github.com/dave8172/firstwatch/discussion
 |---|---|
 | [Getting started](docs/getting-started.md) | Install for your agent, see it work, lift the gate |
 | [Claude Code](docs/claude-code.md) | What the hooks do, permission modes, settings, debugging |
+| [Agent study](docs/agent-study.md) | Does firstwatch make an agent worse? Measured on an email agent |
 | [Library](docs/library.md) | `scan()` and `watch()` in Python and Node |
 | [Rules](docs/rules.md) | What's detected, levels, where text hides |
 | [OpenTelemetry](docs/opentelemetry.md) | Send captures to your observability stack |

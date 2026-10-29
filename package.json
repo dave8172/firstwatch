@@ -9,6 +9,7 @@
   "exports": {
     ".": "./src/index.js",
     "./scan": "./src/scan.js",
+    "./gate": "./src/gate.js",
     "./capture": "./src/capture.js",
     "./claude-code": "./src/claude-code.js",
     "./rules.json": "./rules/rules.json",
