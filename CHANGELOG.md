@@ -2,6 +2,11 @@
 
 All notable changes. Versions follow [semantic versioning](https://semver.org); until 1.0, a minor bump can break the capture format or the API.
 
+## Unreleased
+
+- OTLP export sets `observedTimeUnixNano` (the collector showed 1970 without it).
+- Docs: OTLP export tested against a live OpenTelemetry Collector.
+
 ## 0.1.0 — 2026-10-29
 
 First release.

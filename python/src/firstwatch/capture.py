@@ -4,6 +4,7 @@ import json
 import os
 import re
 import secrets
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -252,6 +253,7 @@ def to_otlp(rec):
             "scope": {"name": "firstwatch", "version": VERSION},
             "logRecords": [{
                 "timeUnixNano": str(int(t.timestamp() * 1000) * 1_000_000),
+                "observedTimeUnixNano": str(time.time_ns()),
                 "severityNumber": 13 if stop else 9,
                 "severityText": "WARN" if stop else "INFO",
                 "eventName": "firstwatch.capture",

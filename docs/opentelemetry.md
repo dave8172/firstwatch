@@ -25,4 +25,4 @@ If your agent already emits OpenTelemetry GenAI spans, pass the same session ID 
 
 ## Status
 
-The export follows the OTLP/JSON encoding (`resourceLogs` → `scopeLogs` → `logRecords`, with `timeUnixNano` as a string and attribute values as `AnyValue`). As of 0.1.0 it's checked against that encoding in tests, but it hasn't yet been sent to a live collector in CI. If your backend rejects a record, please [open an issue](https://github.com/dave8172/firstwatch/issues/new?template=bug.yml).
+Tested 2026-10-29 against a live OpenTelemetry Collector (v0.164.0, OTLP/HTTP receiver, the config in [examples/opentelemetry/](../examples/opentelemetry/)). Records exported by both the Node and the Python package were accepted (HTTP 200, nothing rejected). The collector read the timestamp, `eventName`, severity, body and every attribute, including the list attributes. If your backend rejects a record, please [open an issue](https://github.com/dave8172/firstwatch/issues/new?template=bug.yml).

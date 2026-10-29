@@ -92,6 +92,7 @@ test('OTLP export is one log record with the attributes', () => {
   assert.equal(r.severityText, 'WARN');
   assert.ok(r.attributes.some((a) => a.key === 'gen_ai.conversation.id'));
   assert.match(r.timeUnixNano, /^\d{19}$/);
+  assert.match(r.observedTimeUnixNano, /^\d{19}$/);
 });
 
 test('watch: clean saves nothing, stop saves a folder, note a line', async () => {

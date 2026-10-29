@@ -84,6 +84,7 @@ class Capture(unittest.TestCase):
         log = to_otlp(rec)["resourceLogs"][0]["scopeLogs"][0]["logRecords"][0]
         self.assertEqual(log["eventName"], "firstwatch.capture")
         self.assertRegex(log["timeUnixNano"], r"^\d{19}$")
+        self.assertRegex(log["observedTimeUnixNano"], r"^\d{19}$")
 
     def test_watch(self):
         with tempfile.TemporaryDirectory() as d:

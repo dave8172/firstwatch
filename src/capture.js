@@ -225,6 +225,7 @@ export function toOtlp(rec) {
         scope: { name: 'firstwatch', version: VERSION },
         logRecords: [{
           timeUnixNano: String(BigInt(Date.parse(rec.time)) * 1000000n),
+          observedTimeUnixNano: String(BigInt(Date.now()) * 1000000n),
           severityNumber: rec.level === 'stop' ? 13 : 9,
           severityText: rec.level === 'stop' ? 'WARN' : 'INFO',
           eventName: 'firstwatch.capture',
