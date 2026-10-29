@@ -34,7 +34,7 @@ For the rest of that session, anything beyond reading needed the user's OK.
 
 - **Watches.** Every page, file, command output, search result and MCP result is scanned for attacks aimed at agents, in the text people see and in the text they don't: HTML comments, white or tiny text, hidden elements, alt text, invisible Unicode characters, base64.
 - **Records.** Each attack becomes a folder of evidence: the exact text, where it hid and how, what it tried, the steps before it, and how to reproduce it. The format is open, uses [OpenTelemetry](docs/opentelemetry.md) names, and tags every finding with MITRE ATLAS and OWASP IDs.
-- **Stops.** The agent is told the content is hostile. After an attack, every action beyond reading in that session waits for your OK. MCP tools that send, pay, delete, share or grant always ask.
+- **Stops.** The agent is told the content is hostile. After an attack, every action beyond reading in that session waits for your OK, and so does every MCP call (firstwatch can't tell which MCP tools only read). MCP tools that send, pay, delete, share or grant always ask.
 
 No dependencies. No model calls. Captures never leave your machine.
 
