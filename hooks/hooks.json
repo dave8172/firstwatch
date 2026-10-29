@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "WebFetch|WebSearch|Bash|Read|Grep|mcp__.*",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/firstwatch.js\" hook claude-code", "timeout": 20 }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/firstwatch.js\" hook claude-code", "timeout": 10 }]
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "firstwatch",
+  "version": "0.1.0",
+  "description": "First line of defence for AI agents: spots attacks hidden in pages, files and tool results, records each one as evidence in an OpenTelemetry-ready format, and asks before risky actions. Claude Code hooks plus a skill for any agent. No dependencies, no network calls of its own except re-reading a page the agent fetched.",
+  "type": "module",
+  "bin": {
+    "firstwatch": "bin/firstwatch.js"
+  },
+  "exports": {
+    ".": "./src/scan.js",
+    "./capture": "./src/capture.js",
+    "./claude-code": "./src/claude-code.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "schema",
+    "skills",
+    "hooks",
+    ".claude-plugin",
+    "SPEC.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "keywords": [
+    "ai-agents",
+    "agent-security",
+    "prompt-injection",
+    "llm-security",
+    "claude-code",
+    "hooks",
+    "opentelemetry",
+    "mitre-atlas",
+    "owasp-llm"
+  ],
+  "author": "dave8172",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dave8172/firstwatch.git"
+  },
+  "homepage": "https://github.com/dave8172/firstwatch#readme"
+}

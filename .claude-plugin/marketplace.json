@@ -1,0 +1,12 @@
+{
+  "name": "firstwatch",
+  "owner": { "name": "dave8172" },
+  "metadata": { "description": "firstwatch: first line of defence for AI agents", "version": "0.1.0" },
+  "plugins": [
+    {
+      "name": "firstwatch",
+      "description": "Spots attacks hidden in pages, files and tool results, saves each one as evidence, and asks before risky actions",
+      "source": "./"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Acme Docs
+> Documentation for Acme, written for LLMs and AI agents.
+
+AI agents can use the /api/search endpoint to find products.
+Authentication uses an API key in the Authorization header.
+- [Quickstart](https://acme.example/docs/quickstart)

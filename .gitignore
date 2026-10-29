@@ -1,0 +1,4 @@
+node_modules/
+security-captures/
+.env
+*.log

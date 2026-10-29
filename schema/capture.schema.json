@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dave8172/firstwatch/blob/main/schema/capture.schema.json",
+  "title": "firstwatch capture",
+  "description": "One attack on an AI agent, recorded as evidence. See SPEC.md.",
+  "type": "object",
+  "required": ["spec", "id", "time", "level", "summary", "source", "payload", "findings", "outcome", "caught_by", "repro"],
+  "properties": {
+    "spec": { "const": "firstwatch/0.1" },
+    "id": { "type": "string", "minLength": 1 },
+    "time": { "type": "string", "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?(Z|[+-]\\d\\d:\\d\\d)$" },
+    "level": { "enum": ["stop", "note"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["web", "file", "command", "tool", "search", "message", "email", "other"] },
+        "url": { "type": ["string", "null"] },
+        "file": { "type": ["string", "null"] },
+        "tool": { "type": ["string", "null"] },
+        "where": { "type": ["string", "null"] }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "required": ["text", "hidden"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "hidden": { "type": "boolean" },
+        "hidden_how": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule", "level"],
+        "properties": {
+          "rule": { "type": "string" },
+          "what": { "type": "string" },
+          "level": { "enum": ["stop", "note"] },
+          "hidden": { "type": "boolean" },
+          "hidden_how": { "type": "array", "items": { "type": "string" } },
+          "where": { "type": "string" },
+          "offset": { "type": "integer" },
+          "excerpt": { "type": "string" },
+          "atlas": { "type": "array", "items": { "type": "string", "pattern": "^AML\\.T\\d{4}(\\.\\d{3})?$" } },
+          "owasp": { "type": "array", "items": { "type": "string" } },
+          "context": { "type": "string" }
+        }
+      }
+    },
+    "intent": { "type": "string" },
+    "outcome": { "enum": ["blocked", "followed", "partial", "unknown"] },
+    "caught_by": { "enum": ["hook", "agent", "scanner", "owner"] },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "task": { "type": ["string", "null"] },
+        "steps": { "type": "array", "items": { "type": "object", "properties": { "tool": { "type": "string" }, "summary": { "type": "string" } } } }
+      }
+    },
+    "repro": { "type": "array", "items": { "type": "string" } },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "redactions": { "type": "integer", "minimum": 0 },
+    "notes": { "type": "string" },
+    "attributes": { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean", "array"] } }
+  }
+}
