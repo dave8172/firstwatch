@@ -2,7 +2,7 @@
 
 Public repo. This file ships with it: nothing personal, no project names, no machine paths.
 
-**What it is:** first line of defence for AI agents. Scans tool results for attacks aimed at agents, records each as a capture (SPEC.md), and gates outward actions after one. Claude Code hooks + a skill + a paste-in rule + a CLI.
+**What it is:** first line of defence for AI agents. Scans tool results for attacks aimed at agents, records each as a capture (SPEC.md), and gates outward actions after one. Two packages from one repo: npm (Node library + CLI + Claude Code hooks + plugin + skill) and PyPI (Python library + CLI).
 
 **What it owns / what the user owns:** firstwatch owns the rules, the capture format and the gate decision. The user owns where captures go and whether any capture leaves the machine.
 
@@ -10,26 +10,30 @@ Public repo. This file ships with it: nothing personal, no project names, no mac
 
 | Path | What |
 |---|---|
-| `src/rules.js` | detection rules, ATLAS + OWASP IDs |
-| `src/scan.js` | splits input into seen/hidden segments, runs rules. Pure, no I/O |
-| `src/redact.js` | masks secrets (and emails outside the payload) |
-| `src/capture.js` | builds, validates, writes captures; OTLP export; session gate state |
-| `src/claude-code.js` | Claude Code hook adapter (PostToolUse scan, PreToolUse gate) |
-| `bin/firstwatch.js` | CLI |
-| `skills/firstwatch/SKILL.md` · `RULE.md` | the rule for the model: skill form, paste-in form. Keep them in step |
+| `rules/rules.json` | **the only place rules live.** Both packages load it. After editing: `npm run sync-rules` (copies it into the Python package, regenerates `docs/rules.md`) |
+| `src/` | Node: `scan.js` (pure), `capture.js`, `redact.js`, `claude-code.js` (hook adapter), `index.js` (API), `rules.js` (loader) |
+| `python/src/firstwatch/` | Python: the same modules, line for line. A change to one side is a change to both |
+| `test/fixtures/` + `test/expected.json` | shared by both test suites |
+| `test/self.test.js` | the repo checks itself: no invisible characters, rules copy in sync, rules doc current |
+| `skills/firstwatch/SKILL.md` · `RULE.md` | the rule for the model. Keep them in step |
 | `hooks/hooks.json` · `.claude-plugin/` | Claude Code plugin + marketplace |
-| `SPEC.md` · `schema/capture.schema.json` | the format. Change both together |
+| `SPEC.md` · `schema/` | the format. Change both together, and `SPEC` in both packages |
+| `scripts/check-pages.mjs` + `pages.txt` | false-alarm check on real sites. Run before every release |
 
 ## Rules for changes
 
-- **Zero dependencies.** Node built-ins only.
+- **Zero dependencies** in both packages.
 - **A hook must never break the agent.** Bad input or an internal error → exit 0, no output.
-- **Every new rule comes with a fixture that triggers it and one harmless page that must not** (`test/fixtures`). Re-run the real-page check before release: raw HTML of ordinary sites must not stop.
-- **Hidden text escalates; visible quoted examples downgrade.** A visible match only stops when it is an attack in its own right, not a description of one.
-- **Numbers in README are measured,** with what they were measured on and the date.
-- **Format changes:** bump `SPEC` in `src/capture.js`, SPEC.md and the schema together. Draft until 1.0.
-- Test: `npm test`. Check: `node --check` every file (importing the CLI runs it). Plugin: `claude plugin validate .`.
+- **Every rule change:** an attack fixture + a harmless fixture, both suites green, `npm run check-pages` reviewed.
+- **Never type `\uXXXX` escapes straight into a file.** They can land as the real invisible characters. Build them from `chr(92)`/`String.fromCharCode(92)`. `test/self.test.js` catches it.
+- **Numbers in README and docs are measured,** dated, with what they were measured on.
+
+## Release
+
+1. Bump the version in `package.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `python/pyproject.toml`, `VERSION` in `src/capture.js` and `python/src/firstwatch/capture.py`, and `rules/rules.json` if the rules changed. Then update CHANGELOG.md.
+2. Both test suites, `npm run check-pages`, `claude plugin validate .`.
+3. Tag `vX.Y.Z`, push, publish a GitHub release. `publish-pypi.yml` (trusted publishing) and `publish-npm.yml` (trusted publishing + provenance) run from it, and both skip a version that's already out.
 
 ## Status
 
-0.1.0, built 2026-10-29. Not published yet (no GitHub remote, not on npm).
+0.1.0, 2026-10-29.

@@ -1,0 +1,27 @@
+name: False alarm
+description: An ordinary page or file that firstwatch stopped
+labels: ["false-alarm"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: URL or a short description of the content
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What firstwatch said
+      description: Output of `firstwatch scan <file>`, or the capture's README.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it's harmless
+  - type: input
+    id: version
+    attributes:
+      label: firstwatch version
+      placeholder: "0.1.0"

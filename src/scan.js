@@ -2,22 +2,13 @@
 // No network, no model. It splits the input into what people see and what they
 // don't, then runs the rules on each part.
 
-import { RULES, AGENT_RE } from './rules.js';
+import { RULES, AGENT_RE, HIDDEN_STYLE, DISCUSSION, BUILTIN } from './rules.js';
 
-const ZERO_WIDTH = /[​-‍⁠-⁤﻿­]/g;
-const BIDI = /[‪-‮⁦-⁩]/;
+const ZERO_WIDTH = /[\u200B-\u200D\u2060-\u2064\uFEFF\u00AD]/g;
+const BIDI = /[\u202A-\u202E\u2066-\u2069]/;
 const TAG_CHARS = /[\u{E0000}-\u{E007F}]+/gu;
 const LEVELS = { clean: 0, note: 1, stop: 2 };
 
-const HIDDEN_STYLE = [
-  [/display\s*:\s*none/i, 'css:display-none'],
-  [/visibility\s*:\s*hidden/i, 'css:visibility-hidden'],
-  [/font-size\s*:\s*(?:0|0?\.\d+|1)(?:px|pt|em|rem)?\s*(?:;|$|!)/i, 'css:tiny-text'],
-  [/opacity\s*:\s*0(?:\.0+)?\s*(?:;|$|!)/i, 'css:opacity-0'],
-  [/(?:left|top|right|text-indent|margin-left)\s*:\s*-\d{3,}/i, 'css:off-screen'],
-  [/(?:^|[;\s])color\s*:\s*(?:#fff\b|#ffffff\b|white\b|transparent\b|rgba\([^)]*,\s*0\s*\))/i, 'css:white-or-transparent-text'],
-  [/(?:height|width)\s*:\s*0(?:px)?\s*;[^"']*overflow\s*:\s*hidden/i, 'css:zero-size'],
-];
 
 export function decodeEntities(s) {
   return s
@@ -141,7 +132,7 @@ export function scan(input) {
   const seen = new Set();
   const segs = segments(input);
   if (BIDI.test(input)) {
-    findings.push(finding({ id: 'bidi-control', what: 'contains characters that reorder text on screen', atlas: ['AML.T0068'], owasp: ['LLM01:2025'] }, 'note', { hidden: true, how: ['bidi-control-characters'], where: 'text', offset: 0 }, '(bidirectional control characters present)'));
+    findings.push(finding(BUILTIN['bidi-control'], 'note', { hidden: true, how: ['bidi-control-characters'], where: 'text', offset: 0 }, '(bidirectional control characters present)'));
   }
 
   for (const seg of segs) {
@@ -153,7 +144,7 @@ export function scan(input) {
     let segHit = false;
 
     if (seg.how.includes('unicode-tag-characters')) {
-      findings.push(finding({ id: 'unicode-tag-smuggling', what: 'hides text in invisible Unicode tag characters', atlas: ['AML.T0068', 'AML.T0051.001'], owasp: ['LLM01:2025'] }, 'stop', segFor, text.slice(0, 240)));
+      findings.push(finding(BUILTIN['unicode-tag-smuggling'], 'stop', segFor, text.slice(0, 240)));
       segHit = true;
     }
 
@@ -189,14 +180,14 @@ export function scan(input) {
 
     // Hidden menus often name AI products; only a comment or invisible characters aimed at AI is worth a note.
     if (!segHit && seg.hidden && AGENT_RE.test(text) && /^(?:html-comment|unicode-tag-characters)$/.test(seg.how[0] ?? '')) {
-      findings.push(finding({ id: 'hidden-agent-text', what: 'hidden text that mentions AI agents', atlas: ['AML.T0051.001'], owasp: ['LLM01:2025'] }, 'note', segFor, text.slice(0, 240)));
+      findings.push(finding(BUILTIN['hidden-agent-text'], 'note', segFor, text.slice(0, 240)));
     }
   }
 
   // A page that talks about these attacks at length (an article, a course) quotes them in visible text.
   // Its visible examples become notes; anything hidden still stops.
   const visible = segs.filter((x) => !x.hidden).map((x) => x.text).join(' ');
-  if ((visible.match(/prompt[ -]?injections?|jailbreak/gi) || []).length >= 3) {
+  if ((visible.match(DISCUSSION.re) || []).length >= DISCUSSION.min) {
     for (const f of findings) {
       if (f.level === 'stop' && !f.hidden) {
         f.level = 'note';

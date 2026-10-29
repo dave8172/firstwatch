@@ -93,3 +93,15 @@ test('OTLP export is one log record with the attributes', () => {
   assert.ok(r.attributes.some((a) => a.key === 'gen_ai.conversation.id'));
   assert.match(r.timeUnixNano, /^\d{19}$/);
 });
+
+test('watch: clean saves nothing, stop saves a folder, note a line', async () => {
+  const { watch } = await import('../src/index.js');
+  const { readFileSync: read } = await import('node:fs');
+  const fx = (n) => read(new URL(`./fixtures/${n}`, import.meta.url), 'utf8');
+  const dir = tmp();
+  assert.equal(watch(fx('api-docs.html'), { url: 'https://a.example', dir }).saved, null);
+  const r = watch(fx('white-text.html'), { url: 'https://shop.example/pricing', tool: 'fetch', dir });
+  assert.equal(r.level, 'stop');
+  assert.ok(existsSync(join(r.saved, 'capture.json')));
+  assert.match(watch(fx('recommend.html'), { dir }).saved, /notes\.jsonl$/);
+});

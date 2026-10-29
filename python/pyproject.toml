@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.27"]   # >=1.27 for SPDX license expressions
+build-backend = "hatchling.build"
+
+[project]
+name = "firstwatch"
+version = "0.1.0"
+description = "First line of defence for AI agents: spots attacks hidden in pages, files and tool results, and records each one as evidence in an open, OpenTelemetry-ready format with MITRE ATLAS and OWASP IDs. No dependencies."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "dave8172" }]
+requires-python = ">=3.9"
+dependencies = []
+keywords = ["ai-agents", "agent-security", "prompt-injection", "llm-security", "guardrails", "opentelemetry", "mitre-atlas", "owasp", "security"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/dave8172/firstwatch"
+Documentation = "https://github.com/dave8172/firstwatch/tree/main/docs"
+Source = "https://github.com/dave8172/firstwatch"
+Issues = "https://github.com/dave8172/firstwatch/issues"
+Changelog = "https://github.com/dave8172/firstwatch/blob/main/CHANGELOG.md"
+
+[project.scripts]
+firstwatch = "firstwatch.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/firstwatch"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/firstwatch", "README.md", "LICENSE"]

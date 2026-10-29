@@ -1,0 +1,81 @@
+{
+  "api-docs.html": {
+    "level": "clean",
+    "rules": []
+  },
+  "bank.html": {
+    "level": "clean",
+    "rules": []
+  },
+  "base64.html": {
+    "level": "stop",
+    "rules": [
+      "override-instructions",
+      "reveal-instructions"
+    ]
+  },
+  "hidden-comment.html": {
+    "level": "stop",
+    "rules": [
+      "exfiltrate-secrets",
+      "override-instructions"
+    ]
+  },
+  "hidden-config.html": {
+    "level": "stop",
+    "rules": [
+      "agent-imperative",
+      "modify-agent-config"
+    ]
+  },
+  "install.html": {
+    "level": "clean",
+    "rules": []
+  },
+  "llms.txt": {
+    "level": "clean",
+    "rules": []
+  },
+  "markdown-image.md": {
+    "level": "stop",
+    "rules": [
+      "image-exfiltration"
+    ]
+  },
+  "recommend.html": {
+    "level": "note",
+    "rules": [
+      "agent-imperative"
+    ]
+  },
+  "security-article.html": {
+    "level": "note",
+    "rules": [
+      "override-instructions",
+      "reveal-instructions",
+      "role-hijack"
+    ]
+  },
+  "unicode-tags.txt": {
+    "level": "stop",
+    "rules": [
+      "override-instructions",
+      "remote-code",
+      "unicode-tag-smuggling"
+    ]
+  },
+  "white-text.html": {
+    "level": "stop",
+    "rules": [
+      "agent-imperative",
+      "conceal-from-user",
+      "exfiltrate-secrets"
+    ]
+  },
+  "zero-width.txt": {
+    "level": "stop",
+    "rules": [
+      "override-instructions"
+    ]
+  }
+}

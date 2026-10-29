@@ -1,0 +1,34 @@
+name: Publish to npm
+
+# Runs when a GitHub release is published. Uses npm trusted publishing (OIDC) with
+# provenance: no token is stored. The npm side is configured once in the package's
+# settings on npmjs.com (Trusted publisher: GitHub Actions, dave8172/firstwatch,
+# workflow publish-npm.yml). Skips a version that is already on npm.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm test
+      - name: Publish unless this version is already out
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "firstwatch@$VERSION" version >/dev/null 2>&1; then
+            echo "firstwatch@$VERSION is already on npm; nothing to do."
+          else
+            npm publish --provenance --access public
+          fi

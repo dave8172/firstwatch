@@ -1,0 +1,27 @@
+name: Bug
+description: Something in firstwatch doesn't work as documented
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Versions
+      placeholder: "firstwatch 0.1.0 (npm or PyPI), Node 22 / Python 3.12, Claude Code 2.1, macOS"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: For hook problems, run with FIRSTWATCH_DEBUG_LOG=/tmp/fw.jsonl and paste the lines (remove anything private).
+      render: text

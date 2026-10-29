@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: A way past firstwatch (report privately)
+    url: https://github.com/dave8172/firstwatch/security/advisories/new
+    about: Turning off the hook, lifting the gate from content, a secret saved unmasked. Please don't post these in public.
+  - name: Questions and show-and-tell
+    url: https://github.com/dave8172/firstwatch/discussions
+    about: How-to questions, captures you want to talk about, ideas.

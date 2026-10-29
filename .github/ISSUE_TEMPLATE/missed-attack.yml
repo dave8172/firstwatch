@@ -1,0 +1,44 @@
+name: Missed attack
+description: An attack on an AI agent that firstwatch didn't flag (or flagged too weakly)
+labels: ["missed-attack"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks: this is the most useful report there is.
+        **Remove real secrets and personal data first.** If the attack is a way past firstwatch itself (turning off the hook, lifting the gate), use [private reporting](https://github.com/dave8172/firstwatch/security/advisories/new) instead.
+  - type: textarea
+    id: text
+    attributes:
+      label: The attack text
+      description: Word for word, as the agent saw it.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where it was and how it was hidden
+      description: "Page, email, file, tool result. Hidden how: white text, comment, attribute, invisible characters, not hidden…"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source URL (optional)
+      description: Only if it's public and safe to share.
+  - type: textarea
+    id: result
+    attributes:
+      label: What firstwatch said
+      description: Output of `firstwatch scan <file>` on the content, if you can.
+      render: json
+  - type: textarea
+    id: effect
+    attributes:
+      label: What it tried to make the agent do, and whether it worked
+  - type: input
+    id: version
+    attributes:
+      label: firstwatch version and agent
+      placeholder: "0.1.0, Claude Code 2.1"

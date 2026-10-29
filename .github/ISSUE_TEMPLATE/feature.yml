@@ -1,0 +1,14 @@
+name: Idea or adapter
+description: A new agent to support, a detector to connect, or another improvement
+labels: ["idea"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem it solves
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you'd like firstwatch to do

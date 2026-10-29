@@ -1,0 +1,22 @@
+# A minimal OpenTelemetry Collector that accepts firstwatch captures over OTLP/HTTP
+# and prints them. Swap the debug exporter for your backend (Grafana, Datadog,
+# Honeycomb, Elastic, Langfuse, Phoenix…).
+#
+#   docker run --rm -p 4318:4318 -v "$PWD/examples/opentelemetry/collector.yaml:/etc/otelcol/config.yaml" otel/opentelemetry-collector
+#   ./examples/opentelemetry/send.sh examples/capture/*/capture.json
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      exporters: [debug]

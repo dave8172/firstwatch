@@ -1,0 +1,17 @@
+{
+  "_about": "firstwatch hooks without the plugin: put this in .claude/settings.json (one project) or ~/.claude/settings.json (every project), after: npm install -g firstwatch",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "WebFetch|WebSearch|Bash|Read|Grep|mcp__.*",
+        "hooks": [{ "type": "command", "command": "firstwatch hook claude-code", "timeout": 20 }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [{ "type": "command", "command": "firstwatch hook claude-code", "timeout": 10 }]
+      }
+    ]
+  }
+}

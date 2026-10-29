@@ -6,24 +6,15 @@ import { scan } from '../src/scan.js';
 const fx = (name) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8');
 const rules = (r) => r.findings.map((f) => f.rule);
 
-const expected = {
-  'api-docs.html': 'clean',
-  'bank.html': 'clean',
-  'install.html': 'clean',
-  'llms.txt': 'clean',
-  'recommend.html': 'note',
-  'security-article.html': 'note',
-  'base64.html': 'stop',
-  'hidden-comment.html': 'stop',
-  'hidden-config.html': 'stop',
-  'markdown-image.md': 'stop',
-  'unicode-tags.txt': 'stop',
-  'white-text.html': 'stop',
-  'zero-width.txt': 'stop',
-};
+// Shared with the Python tests: the same fixtures must give the same results in both.
+const expected = JSON.parse(readFileSync(new URL('./expected.json', import.meta.url), 'utf8'));
 
-for (const [file, level] of Object.entries(expected)) {
-  test(`${file} → ${level}`, () => assert.equal(scan(fx(file)).level, level));
+for (const [file, want] of Object.entries(expected)) {
+  test(`${file} → ${want.level}`, () => {
+    const r = scan(fx(file));
+    assert.equal(r.level, want.level);
+    assert.deepEqual([...new Set(rules(r))].sort(), want.rules);
+  });
 }
 
 test('hidden comment: says where and how it was hidden', () => {

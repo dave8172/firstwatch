@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync, appendFileSync, existsSync, readFileSync } fr
 import { join, resolve, basename } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { redact, redactDeep } from './redact.js';
-import { ATLAS, OWASP } from './rules.js';
+import { ATLAS, OWASP, PRIORITY } from './rules.js';
 
 export const SPEC = 'firstwatch/0.1';
 export const VERSION = '0.1.0';
@@ -15,7 +15,6 @@ const KINDS = ['web', 'file', 'command', 'tool', 'search', 'message', 'email', '
 const MAX_EVIDENCE = 2_000_000;
 
 // Most serious first: what the attack does, then how it hides.
-const PRIORITY = ['exfiltrate-secrets', 'image-exfiltration', 'remote-code', 'modify-agent-config', 'override-instructions', 'role-hijack', 'reveal-instructions', 'unicode-tag-smuggling', 'conceal-from-user', 'agent-imperative', 'new-instructions', 'hidden-agent-text', 'bidi-control'];
 const rank = (f) => (f.level === 'stop' ? 0 : 100) + (PRIORITY.indexOf(f.rule) + 1 || 50);
 export const primary = (findings) => [...findings].sort((a, b) => rank(a) - rank(b))[0];
 

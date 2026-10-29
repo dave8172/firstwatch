@@ -7,26 +7,34 @@
     "firstwatch": "bin/firstwatch.js"
   },
   "exports": {
-    ".": "./src/scan.js",
+    ".": "./src/index.js",
+    "./scan": "./src/scan.js",
     "./capture": "./src/capture.js",
-    "./claude-code": "./src/claude-code.js"
+    "./claude-code": "./src/claude-code.js",
+    "./rules.json": "./rules/rules.json",
+    "./package.json": "./package.json"
   },
   "files": [
     "bin",
     "src",
+    "rules",
     "schema",
     "skills",
     "hooks",
     ".claude-plugin",
+    "RULE.md",
     "SPEC.md",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test",
+    "sync-rules": "node scripts/sync-rules.mjs",
+    "check-pages": "node scripts/check-pages.mjs"
   },
   "engines": {
-    "node": ">=18.17"
+    "node": ">=20"
   },
   "keywords": [
     "ai-agents",
@@ -45,5 +53,8 @@
     "type": "git",
     "url": "git+https://github.com/dave8172/firstwatch.git"
   },
-  "homepage": "https://github.com/dave8172/firstwatch#readme"
+  "homepage": "https://github.com/dave8172/firstwatch#readme",
+  "bugs": {
+    "url": "https://github.com/dave8172/firstwatch/issues"
+  }
 }

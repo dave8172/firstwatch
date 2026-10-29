@@ -1,0 +1,21 @@
+# Ordinary pages for the false-alarm check (scripts/check-pages.mjs).
+# Pages about prompt injection are listed too: they should give notes, not stops,
+# unless they really carry a hidden payload.
+https://developer.mozilla.org/en-US/docs/Web/HTML
+https://docs.python.org/3/tutorial/index.html
+https://github.com/
+https://www.bbc.com/news
+https://stackoverflow.com/questions/11227809
+https://docs.stripe.com/keys
+https://react.dev/
+https://vercel.com/
+https://www.npmjs.com/package/express
+https://news.ycombinator.com/
+https://www.paypal.com/us/home
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+https://brew.sh/
+https://docs.anthropic.com/llms.txt
+https://en.wikipedia.org/wiki/Prompt_injection
+https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+https://learnprompting.org/docs/prompt_hacking/injection
+https://simonwillison.net/tags/prompt-injection/

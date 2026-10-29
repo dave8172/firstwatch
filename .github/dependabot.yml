@@ -1,0 +1,7 @@
+# firstwatch has no dependencies; this keeps the GitHub Actions it uses current.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
