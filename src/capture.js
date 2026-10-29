@@ -7,7 +7,7 @@ import { redact, redactDeep } from './redact.js';
 import { ATLAS, OWASP, PRIORITY } from './rules.js';
 
 export const SPEC = 'firstwatch/0.1';
-export const VERSION = '0.1.0';
+export const VERSION = '0.1.1';
 const LEVELS = ['stop', 'note'];
 const OUTCOMES = ['blocked', 'followed', 'partial', 'unknown'];
 const CAUGHT_BY = ['hook', 'agent', 'scanner', 'owner'];

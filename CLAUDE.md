@@ -36,4 +36,4 @@ Public repo. This file ships with it: nothing personal, no project names, no mac
 
 ## Status
 
-0.1.0, 2026-10-29.
+0.1.1, 2026-10-29. Releases go out through GitHub Actions trusted publishing on both registries.

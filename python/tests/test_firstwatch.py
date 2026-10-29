@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "python" / "src"))
 
-from firstwatch import build, redact, scan, to_otlp, validate, watch, write_capture  # noqa: E402
+from firstwatch import __version__, build, redact, scan, to_otlp, validate, watch, write_capture  # noqa: E402
 
 FIXTURES = ROOT / "test" / "fixtures"
 EXPECTED = json.loads((ROOT / "test" / "expected.json").read_text(encoding="utf-8"))
@@ -102,7 +102,7 @@ class Cli(unittest.TestCase):
         return subprocess.run([sys.executable, "-m", "firstwatch", *args], input=stdin, capture_output=True, text=True, env=env)
 
     def test_version_and_scan(self):
-        self.assertEqual(self.run_cli("--version").stdout.strip(), "0.1.0")
+        self.assertEqual(self.run_cli("--version").stdout.strip(), __version__)
         out = json.loads(self.run_cli("scan", str(FIXTURES / "base64.html")).stdout)
         self.assertEqual(out["level"], "stop")
 

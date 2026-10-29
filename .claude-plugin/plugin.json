@@ -1,6 +1,6 @@
 {
   "name": "firstwatch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "First line of defence for AI agents: spots attacks hidden in pages, files and tool results, saves each one as evidence, and asks before risky actions",
   "author": { "name": "dave8172", "url": "https://github.com/dave8172" },
   "homepage": "https://github.com/dave8172/firstwatch",
