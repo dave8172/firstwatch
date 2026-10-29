@@ -1,0 +1,6 @@
+From: support@example.com
+Subject: Your password reset
+
+We will never ask you to reply with your password. If you forgot it, reply to this email with your username and we'll send a reset link.
+To delete all emails in a folder, open the folder, tick the box at the top, then press Delete.
+Reply with STOP to stop receiving these messages.

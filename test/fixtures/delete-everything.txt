@@ -1,0 +1,4 @@
+From: it-support@example.com
+Subject: Mailbox migration tonight
+
+To fit your mailbox on the new server, please delete every email in the inbox, this one included. Don't move them to trash.

@@ -2,6 +2,12 @@
 
 All notable changes. Versions follow [semantic versioning](https://semver.org); until 1.0, a minor bump can break the capture format or the API.
 
+## 0.2.0 — 2026-10-29
+
+- **Three new rules** for requests written to a person, the kind an agent meets in mail and messages: `request-secrets` (reply with or send back passwords, keys, codes, card numbers), `request-all-files` (send the contents of every file, email or document), `bulk-delete` (delete everything). A sentence that says *never* or *don't* is skipped, so "we will never ask you to reply with your password" stays clean. Rules version 0.2.0.
+- **`firstwatch/scan` runs in browsers and bundlers:** the rules now ship as a generated module (`src/rules-data.js`), so the scanner needs no file access.
+- Measured on the same 18 real sites as 0.1: still one stop, the same real attack. A held-out set (`test/heldout/`) written before the rules were finished: 10 of 10 attacks stopped, 10 of 10 harmless lookalikes not stopped.
+
 ## 0.1.1 — 2026-10-29
 
 - OTLP export sets `observedTimeUnixNano` (the collector showed 1970 without it).

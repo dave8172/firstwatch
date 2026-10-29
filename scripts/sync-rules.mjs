@@ -1,8 +1,10 @@
-// After editing rules/rules.json: copy it into the Python package and regenerate docs/rules.md.
+// After editing rules/rules.json: copy it into the Python package, write src/rules-data.js (the same rules as a
+// module, so the scanner runs in browsers and bundlers with no file access) and regenerate docs/rules.md.
 import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
 
 const at = (p) => new URL(`../${p}`, import.meta.url);
 copyFileSync(at('rules/rules.json'), at('python/src/firstwatch/rules.json'));
+writeFileSync(at('src/rules-data.js'), `// Generated from rules/rules.json by scripts/sync-rules.mjs. Edit the JSON, not this file.\nexport default ${readFileSync(at('rules/rules.json'), 'utf8').trimEnd()};\n`);
 
 const d = JSON.parse(readFileSync(at('rules/rules.json'), 'utf8'));
 const ids = (xs, names) => xs.map((x) => `${x} ${names[x] ?? ''}`.trim()).join('<br>');
@@ -48,4 +50,4 @@ const lines = [
   '',
 ];
 writeFileSync(at('docs/rules.md'), lines.join('\n'));
-console.log('python/src/firstwatch/rules.json and docs/rules.md updated');
+console.log('python/src/firstwatch/rules.json, src/rules-data.js and docs/rules.md updated');

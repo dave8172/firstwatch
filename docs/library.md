@@ -4,7 +4,7 @@ Same functions in Python and Node, same rules, same capture format. No dependenc
 
 ## scan(text)
 
-Pure: a string in, findings out. No files, no network.
+Pure: a string in, findings out. No files, no network. In JavaScript, `import { scan } from 'firstwatch/scan'` loads only the scanner and its rules, so it also runs in a browser or a bundler.
 
 ```python
 from firstwatch import scan

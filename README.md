@@ -76,6 +76,8 @@ const result = watch(pageHtml, { url, tool: 'fetch' });
 if (result.level === 'stop') { /* warn the model, tell the user */ }
 ```
 
+The scanner alone, `import { scan } from 'firstwatch/scan'`, also runs in a browser or a bundler: no file access, no network.
+
 Step by step, with a page to try it on: **[docs/getting-started.md](docs/getting-started.md)**.
 
 ## How it works
@@ -124,6 +126,7 @@ The format is open: **[SPEC.md](SPEC.md)**, with a [JSON Schema](schema/capture.
 On 2026-10-29:
 
 - **Test pages** ([test/fixtures](test/fixtures)): all 7 attacks stopped (HTML comment, white 1px text, Unicode tag characters, base64, zero-width characters, a markdown image that leaks data, a hidden order to edit CLAUDE.md). None of the 6 harmless pages stopped: API docs that say "include your API key", an install page with `curl … | sh`, an llms.txt, a bank page saying "our agents will never ask…".
+- **Requests written to a person** (0.2.0): a held-out set of 10 attacks in mail and messages (reply with a password, send every file, delete everything) and 10 harmless lookalikes, written before the rules were finished: all 10 attacks stopped, none of the 10 lookalikes stopped. Same author as the rules, so the real-site check below is the independent one ([test/heldout](test/heldout)).
 - **18 real sites, as raw HTML** (MDN, Python docs, GitHub, BBC, Stack Overflow, Stripe's API key docs, React, Vercel, npm, Hacker News, PayPal, GitHub docs, brew.sh, an llms.txt, and four articles about prompt injection): one stop, and it was real. A security blog quotes a payload hidden in invisible Unicode tag characters, and firstwatch decoded it. The articles about prompt injection gave notes. Re-run it yourself: `npm run check-pages`.
 - **Node and Python agree** on every test page and every one of the 18 sites: same level, same rules, same number of findings.
 - **Live in Claude Code:** the run quoted above. On the next turn, a shell command was held for approval in both default and auto permission modes.

@@ -1,6 +1,6 @@
 # What firstwatch detects
 
-<!-- Generated from rules/rules.json (version 0.1.0) by scripts/sync-rules.mjs. Edit the JSON, not this file. -->
+<!-- Generated from rules/rules.json (version 0.2.0) by scripts/sync-rules.mjs. Edit the JSON, not this file. -->
 
 Each rule has two levels: one for text people can see, one for text hidden from them. **stop** means the agent must not follow it and its owner hears about it. **note** means it gets logged quietly.
 
@@ -18,6 +18,9 @@ Three adjustments apply to every rule:
 | `new-instructions` | announces new instructions for the reader | note | stop | AML.T0051.001 LLM Prompt Injection: Indirect | LLM01:2025 Prompt Injection |
 | `conceal-from-user` | tells the agent to hide something from its user | stop | stop | AML.T0051.001 LLM Prompt Injection: Indirect | LLM01:2025 Prompt Injection |
 | `exfiltrate-secrets` | asks for secrets to be sent to an outside address | stop | stop | AML.T0086 Exfiltration via AI Agent Tool Invocation<br>AML.T0057 LLM Data Leakage | LLM02:2025 Sensitive Information Disclosure<br>LLM06:2025 Excessive Agency |
+| `request-secrets` | asks for passwords, keys, codes or other secrets to be sent back | stop | stop | AML.T0057 LLM Data Leakage | LLM02:2025 Sensitive Information Disclosure<br>LLM06:2025 Excessive Agency |
+| `request-all-files` | asks for the contents of every file, email or document to be sent | stop | stop | AML.T0057 LLM Data Leakage<br>AML.T0086 Exfiltration via AI Agent Tool Invocation | LLM02:2025 Sensitive Information Disclosure<br>LLM06:2025 Excessive Agency |
+| `bulk-delete` | asks for everything to be deleted | stop | stop | AML.T0051.001 LLM Prompt Injection: Indirect | LLM06:2025 Excessive Agency |
 | `reveal-instructions` | asks the agent to reveal its instructions | stop | stop | AML.T0057 LLM Data Leakage | LLM07:2025 System Prompt Leakage |
 | `remote-code` | pipes a download straight into a shell | only if hidden or aimed at AI | stop | AML.T0051.001 LLM Prompt Injection: Indirect | LLM06:2025 Excessive Agency |
 | `image-exfiltration` | markdown image whose URL carries a data placeholder | stop | stop | AML.T0086 Exfiltration via AI Agent Tool Invocation | LLM02:2025 Sensitive Information Disclosure |

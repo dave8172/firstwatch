@@ -77,5 +77,27 @@
     "rules": [
       "override-instructions"
     ]
+  },
+  "ask-for-password.txt": {
+    "level": "stop",
+    "rules": [
+      "request-secrets"
+    ]
+  },
+  "ask-for-every-file.txt": {
+    "level": "stop",
+    "rules": [
+      "request-all-files"
+    ]
+  },
+  "delete-everything.txt": {
+    "level": "stop",
+    "rules": [
+      "bulk-delete"
+    ]
+  },
+  "support-mail.txt": {
+    "level": "clean",
+    "rules": []
   }
 }

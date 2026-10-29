@@ -27,6 +27,15 @@ test('the Python package carries the same rules file', () => {
   assert.equal(readFileSync(join(ROOT, 'python/src/firstwatch/rules.json'), 'utf8'), readFileSync(join(ROOT, 'rules/rules.json'), 'utf8'));
 });
 
+test('src/rules-data.js carries the same rules (run: npm run sync-rules)', async () => {
+  const { default: data } = await import('../src/rules-data.js');
+  assert.deepEqual(data, JSON.parse(readFileSync(join(ROOT, 'rules/rules.json'), 'utf8')));
+});
+
+test('scan.js and its imports use no Node-only modules, so it runs in a browser', () => {
+  for (const f of ['src/scan.js', 'src/rules.js', 'src/rules-data.js']) assert.doesNotMatch(readFileSync(join(ROOT, f), 'utf8'), /from ['"]node:|require\(/, f);
+});
+
 test('docs/rules.md is generated from the current rules (run: npm run sync-rules)', () => {
   const doc = readFileSync(join(ROOT, 'docs/rules.md'), 'utf8');
   const rules = JSON.parse(readFileSync(join(ROOT, 'rules/rules.json'), 'utf8'));

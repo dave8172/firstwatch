@@ -1,8 +1,7 @@
-// Loads the shared detection rules (rules/rules.json, also used by the Python package).
+// The shared detection rules (rules/rules.json, also used by the Python package), from the generated module
+// src/rules-data.js: no file access, so scan() runs in browsers and bundlers too.
 
-import { readFileSync } from 'node:fs';
-
-const data = JSON.parse(readFileSync(new URL('../rules/rules.json', import.meta.url), 'utf8'));
+import data from './rules-data.js';
 const rx = (p) => new RegExp(p.source, p.flags.replace('g', ''));
 
 export const RULES_VERSION = data.version;

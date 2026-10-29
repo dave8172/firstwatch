@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "_about": "firstwatch detection rules. Shared by the Node and Python packages; edit here only. Patterns use the common subset of JavaScript and Python regex syntax. Levels: visible = when people can see the text (null = only when hidden or addressed to an AI), hidden = when the text is hidden from people.",
   "atlas": {
     "AML.T0051.001": "LLM Prompt Injection: Indirect",
@@ -100,6 +100,57 @@
       ],
       "pattern": {
         "source": "\\b(?:send|e-?mail|post|upload|share|forward|transmit|exfiltrate|leak|paste|include|append|attach|submit)\\b[^\\n]{0,80}?(?:\\.env\\b|api[ _-]?keys?|access[ _-]?tokens?|auth(?:entication)?[ _-]?tokens?|secrets?|passwords?|credentials?|private[ _-]?keys?|ssh[ _-]?keys?|id_rsa|aws_[a-z_]+|session[ _-]?(?:tokens?|cookies?)|cookies|seed[ _-]?phrase|wallet)[^\\n]{0,80}?(?:[\\w.+-]+@[\\w-]+\\.[\\w.]+|https?:\\/\\/\\S+|\\bto (?:this|the following|our|my) (?:address|url|endpoint|webhook|server|email)|\\bin (?:your|the) (?:reply|response|answer|output))|(?:\\.env\\b|api[ _-]?keys?|access[ _-]?tokens?|auth(?:entication)?[ _-]?tokens?|secrets?|passwords?|credentials?|private[ _-]?keys?|ssh[ _-]?keys?|id_rsa|aws_[a-z_]+|session[ _-]?(?:tokens?|cookies?)|cookies|seed[ _-]?phrase|wallet)[^\\n]{0,40}?\\b(?:send|e-?mail|post|upload|share|forward|transmit|exfiltrate|leak|paste|include|append|attach|submit)\\b[^\\n]{0,60}?(?:[\\w.+-]+@[\\w-]+\\.[\\w.]+|https?:\\/\\/\\S+|\\bto (?:this|the following|our|my) (?:address|url|endpoint|webhook|server|email)|\\bin (?:your|the) (?:reply|response|answer|output))",
+        "flags": "i"
+      }
+    },
+    {
+      "id": "request-secrets",
+      "what": "asks for passwords, keys, codes or other secrets to be sent back",
+      "visible": "stop",
+      "hidden": "stop",
+      "atlas": [
+        "AML.T0057"
+      ],
+      "owasp": [
+        "LLM02:2025",
+        "LLM06:2025"
+      ],
+      "pattern": {
+        "source": "(?:^|[.!?\\n])\\s*(?![^.!?\\n]*?(?:\\b(?:never|not|no one|nobody)\\b|n't\\b))[^.!?\\n]*?(?:\\b(?:reply|respond|write back|answer)\\b[^.!?\\n]{0,60}?\\bwith\\b|\\b(?:send|give|share|tell|provide|forward|e-?mail|text|dm|show)\\s+(?:it\\s+|them\\s+)?(?:to\\s+)?(?:me|us)\\b|\\b(?:send|share|forward|provide|give|upload|paste|post|e-?mail)\\b(?=[^.!?\\n]{0,120}?(?:\\b(?:to|with) (?:me|us|this (?:address|email))\\b|[\\w.+-]+@[\\w-]+\\.[\\w.]+)))[^.!?\\n]{0,60}?\\b(?:passwords?|passcodes?|pass ?phrases?|log ?in (?:details|credentials)|credentials?|api[ _-]?keys?|access[ _-]?tokens?|auth(?:entication)?[ _-]?tokens?|secret keys?|private[ _-]?keys?|ssh[ _-]?keys?|recovery codes?|backup codes?|(?:2fa|mfa|verification|one[ -]time|security) codes?|otps?|pin (?:codes?|numbers?)|seed[ _-]?phrases?|card numbers?|cvv)\\b",
+        "flags": "i"
+      }
+    },
+    {
+      "id": "request-all-files",
+      "what": "asks for the contents of every file, email or document to be sent",
+      "visible": "stop",
+      "hidden": "stop",
+      "atlas": [
+        "AML.T0057",
+        "AML.T0086"
+      ],
+      "owasp": [
+        "LLM02:2025",
+        "LLM06:2025"
+      ],
+      "pattern": {
+        "source": "(?:^|[.!?\\n])\\s*(?![^.!?\\n]*?(?:\\b(?:never|not|no one|nobody)\\b|n't\\b))[^.!?\\n]*?(?:\\b(?:reply|respond|write back|answer)\\b[^.!?\\n]{0,60}?\\bwith\\b|\\b(?:send|give|share|tell|provide|forward|e-?mail|text|dm|show)\\s+(?:it\\s+|them\\s+)?(?:to\\s+)?(?:me|us)\\b|\\b(?:send|share|forward|provide|give|upload|paste|post|e-?mail)\\b(?=[^.!?\\n]{0,120}?(?:\\b(?:to|with) (?:me|us|this (?:address|email))\\b|[\\w.+-]+@[\\w-]+\\.[\\w.]+)))[^.!?\\n]{0,60}?(?:\\b(?:full )?(?:contents?|text|copies|a copy)\\s+(?:of|in)\\s+(?:every|all|each)\\b[^.!?\\n]{0,20}?\\b(?:files?|documents?|docs|emails?|messages?|notes|folders?)\\b|\\beverything in (?:my|your|the user's|their|the) (?:files|documents|docs|folders?|inbox|home folder|drive)\\b)",
+        "flags": "i"
+      }
+    },
+    {
+      "id": "bulk-delete",
+      "what": "asks for everything to be deleted",
+      "visible": "stop",
+      "hidden": "stop",
+      "atlas": [
+        "AML.T0051.001"
+      ],
+      "owasp": [
+        "LLM06:2025"
+      ],
+      "pattern": {
+        "source": "(?:^|[.!?\\n])\\s*(?![^.!?\\n]*?(?:\\b(?:never|not|no one|nobody)\\b|n't\\b))[^.!?\\n]*?\\b(?:please|kindly|now|immediately|go ahead and|you (?:must|should|need to|have to))\\s+(?:delete|erase|wipe|purge|remove|empty|destroy)\\b[^.!?\\n]{0,40}?\\b(?:every|all|each|entire|the whole)\\b[^.!?\\n]{0,30}?\\b(?:emails?|messages?|mail|files?|folders?|data|inbox|documents?|records?|repos?|repositories|backups?|branches|databases?|tables?)\\b",
         "flags": "i"
       }
     },
@@ -237,6 +288,9 @@
   },
   "priority": [
     "exfiltrate-secrets",
+    "request-secrets",
+    "request-all-files",
+    "bulk-delete",
     "image-exfiltration",
     "remote-code",
     "modify-agent-config",
