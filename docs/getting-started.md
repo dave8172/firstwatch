@@ -5,7 +5,7 @@ Pick the agent you use. Each path takes a couple of minutes.
 - [Claude Code](#claude-code): full protection (hooks + skill)
 - [Codex, Cursor, Gemini CLI and other agents with skills](#agents-with-skills)
 - [Any other agent](#any-other-agent)
-- [Your own agent, in Python or Node](#your-own-agent)
+- [Your own agent, in Python or Node](#your-own-agent), including [LangChain, OpenAI Agents SDK and CrewAI](frameworks.md)
 
 ## Claude Code
 
@@ -88,6 +88,8 @@ import { watch } from 'firstwatch';
 const result = watch(pageHtml, { url, tool: 'fetch' });
 if (result.level === 'stop') console.log('attack saved at', result.saved);
 ```
+
+Using LangChain, LangGraph, the OpenAI Agents SDK or CrewAI? [frameworks.md](frameworks.md) wires in the scan and the gate (actions wait for the user's OK after an attack).
 
 A complete fetch tool for each: [examples/python_fetch_tool.py](../examples/python_fetch_tool.py), [examples/node-fetch-tool.mjs](../examples/node-fetch-tool.mjs). The full API: [library.md](library.md).
 

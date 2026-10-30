@@ -10,6 +10,10 @@ It watches what your agent reads, records every attack as evidence, and asks you
 <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue"></a>
 </p>
 
+<p align="center"><b><a href="https://quirkyagents.com/firstwatch/">Try it in your browser</a></b>: paste a page or an email, and the real scanner checks it. Nothing leaves the page.<br>
+For Claude Code, agents with skills (Codex, Cursor, Gemini CLI), and agents you build (LangChain, CrewAI, OpenAI Agents SDK, plain Python or Node).<br>
+Using it at work? <a href="https://github.com/dave8172/firstwatch/discussions/new?category=show-and-tell">Tell us</a>.</p>
+
 ---
 
 Your agent reads web pages, emails, files, search results and tool output. Anyone can write text there for your agent to find, including text people can't see:
@@ -76,6 +80,8 @@ const result = watch(pageHtml, { url, tool: 'fetch' });
 if (result.level === 'stop') { /* warn the model, tell the user */ }
 ```
 
+**LangChain and LangGraph, OpenAI Agents SDK, CrewAI, your own loop:** the scan and the gate in a few lines each, in [docs/frameworks.md](docs/frameworks.md).
+
 The scanner alone, `import { scan } from 'firstwatch/scan'`, also runs in a browser or a bundler: no file access, no network.
 
 Step by step, with a page to try it on: **[docs/getting-started.md](docs/getting-started.md)**.
@@ -138,7 +144,7 @@ On 2026-10-29:
 - **Rules, not a model.** firstwatch catches known tricks and their common English wordings. New phrasing, other languages and attacks split across pages can get past it. The gate is there for that, and model-based detectors work well next to it.
 - **Same-step tool calls.** If the agent reads a page and runs a command in the same step, the command's check runs before the page is scanned. The gate applies from the next step.
 - **Fetched pages are read again.** Claude Code gives hooks a summary of a fetched page, not the page, so firstwatch fetches the URL itself as raw HTML. It sees what a client without JavaScript sees.
-- **Hooks are Claude Code only for now.** Other agents get the rule and the capture steps, which depend on the model noticing.
+- **Hooks are Claude Code only for now.** Agents you build get the same scan and gate from the [framework quickstarts](docs/frameworks.md). Other ready-made agents get the rule and the capture steps, which depend on the model noticing.
 
 More in [docs/claude-code.md](docs/claude-code.md#known-limits).
 
@@ -170,6 +176,7 @@ Ideas and votes: [Discussions](https://github.com/dave8172/firstwatch/discussion
 | [Getting started](docs/getting-started.md) | Install for your agent, see it work, lift the gate |
 | [Claude Code](docs/claude-code.md) | What the hooks do, permission modes, settings, debugging |
 | [Agent study](docs/agent-study.md) | Does firstwatch make an agent worse? Measured on an email agent |
+| [Agent frameworks](docs/frameworks.md) | LangChain and LangGraph, OpenAI Agents SDK, CrewAI, your own loop |
 | [Library](docs/library.md) | `scan()` and `watch()` in Python and Node |
 | [Rules](docs/rules.md) | What's detected, levels, where text hides |
 | [OpenTelemetry](docs/opentelemetry.md) | Send captures to your observability stack |

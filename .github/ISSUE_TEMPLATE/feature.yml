@@ -1,13 +1,33 @@
-name: Idea or adapter
-description: A new agent to support, a detector to connect, or another improvement
+name: Integration or idea
+description: An agent or framework to support, a detector to connect, or another improvement
 labels: ["idea"]
 body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind
+      options:
+        - An agent or framework to support (hooks, a quickstart)
+        - A detector to connect (its alerts saved as firstwatch captures)
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: which
+    attributes:
+      label: Which one
+      placeholder: e.g. OpenCode, Pydantic AI, LlamaIndex, a model-based detector
   - type: textarea
     id: problem
     attributes:
       label: The problem it solves
     validations:
       required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: How you run your agent today
+      description: Framework, where tool results come from, what it can do (send mail, run code…). Optional, and leave out anything private.
   - type: textarea
     id: idea
     attributes:
