@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "_about": "firstwatch detection rules. Shared by the Node and Python packages; edit here only. Patterns use the common subset of JavaScript and Python regex syntax. Levels: visible = when people can see the text (null = only when hidden or addressed to an AI), hidden = when the text is hidden from people.",
   "atlas": {
     "AML.T0051.001": "LLM Prompt Injection: Indirect",
@@ -17,7 +17,7 @@
     "LLM07:2025": "System Prompt Leakage"
   },
   "agent": {
-    "source": "(?:\\b(?:ai|llms?|gpt|claude|gemini|chatgpt|copilot)\\b|\\blanguage models?\\b|\\b(?:assistants?|chatbots?)\\b)",
+    "source": "(?:\\b(?:ai|llms?|gpt|claude|gemini|chatgpt|copilot)\\b|\\blanguage models?\\b|\\b(?:assistants?|chatbots?)\\b)|\\bautomated (?:agents?|assistants?|systems?|handling|clients?|tools?|readers?|processing)\\b|\\bagents?\\s+(?:that\\s+|who\\s+)?(?:read|open|process|consum|handl|summari[sz]|pars|sort)\\w*|\\b(?:coding|autonomous|software|browsing) agents?\\b",
     "flags": "i"
   },
   "rules": [
@@ -66,6 +66,39 @@
       ],
       "pattern": {
         "source": "\\b(?:new|updated|real|actual|true|secret|hidden|additional) (?:system )?(?:instructions?|directives?|orders|task)\\s*[:\\-]",
+        "flags": "i"
+      }
+    },
+    {
+      "id": "abandon-task",
+      "what": "tells an AI reader to drop the task it was given",
+      "visible": null,
+      "hidden": "stop",
+      "atlas": [
+        "AML.T0051.001"
+      ],
+      "owasp": [
+        "LLM01:2025"
+      ],
+      "pattern": {
+        "source": "\\b(?<!n't )(?<!not )(?<!never )(?<!will )(?<!would )(?<!might )(?<!could )(?:ignore|disregard|forget(?: about)?|abandon|stop working on|stop doing|drop|set aside|put aside|quit|scrap|discontinue|leave unfinished|don't bother with|do not bother with|no longer (?:work(?:ing)? on|pursue|continue))\\s+(?:(?:the|this|that|your|their|its|any|whatever)\\s+(?:[\\w'-]+\\s+){0,3}?(?:tasks?|requests?|query|queries|questions?|jobs?|assignments?|objectives?|goals?|work|changes?|instructions?|summar(?:y|ies|ization)|missions?|prompts?)\\b|(?:the|this|that|your)\\s+(?:[\\w'-]+\\s+){0,3}?you(?:'ve| have)?\\s+(?:were|been)\\s+(?:asked|given|told|assigned)\\b|what(?:ever)?\\s+(?:you(?:'re| are| were)?|they|the user)\\s+(?:[\\w'-]+\\s+){0,3}?(?:doing|asked|told|working on|requested|sent)\\b)|\\b(?:tasks?|requests?|query|queries|questions?|jobs?|assignments?|objectives?|goals?|work|changes?|instructions?|summar(?:y|ies|ization)|missions?|prompts?)\\s+(?:\\w+\\s+){0,6}?(?:is|has been|was|are|have been)\\s+(?:now\\s+)?(?:cancell?ed|void|withdrawn|superseded|obsolete|out of scope|no longer (?:needed|relevant|valid|required|in scope))\\b|\\byour (?:new|real|actual|true) (?:task|job|goal|objective|mission|assignment) is (?:now )?to\\b|\\bno longer matters\\b|\\bset it aside\\b|\\bleave it unfinished\\b",
+        "flags": "i"
+      }
+    },
+    {
+      "id": "required-step",
+      "what": "tells an AI reader to do something first before it may answer",
+      "visible": null,
+      "hidden": "stop",
+      "atlas": [
+        "AML.T0051.001"
+      ],
+      "owasp": [
+        "LLM01:2025",
+        "LLM06:2025"
+      ],
+      "pattern": {
+        "source": "(?:^|[.!?\\n])\\s*(?=(?:[^.!?\\n*]|\\.(?=\\S)){0,300}?(?:\\b(?:before|prior to|until)\\s+(?:you\\s+|it\\s+|they\\s+)?(?:have\\s+)?(?:answer|respond|repl|report|summari[sz]|present|relay|show|finish|complet|continu|proceed)\\w*|\\b(?:before|prior to)\\s+(?:giving|you give|it gives)\\s+(?:[\\w-]+\\s+)?(?:answer|reply|response)|\\b(?:only|may only|can only)\\s+(?:then\\s+)?(?:answer|respond|reply|report)\\w*|\\b(?:answer|respond|reply)\\w*\\s+(?:only\\s+)?(?:until|after)\\b|\\b(?:must|need to|needs to|are required to|is required to|have to|has to)\\s+first\\b|\\b(?:please|you)\\s+first\\b|\\bfirst need to\\b|\\bpre-?answer\\b|\\b(?:is|are)\\s+(?:mandatory|required)\\b|\\b(?:mandatory|required)\\s*:|\\b(?:mandatory|required)\\s+(?:[\\w-]+\\s+)?(?:step|check|action|procedure|verification)\\b))(?=(?:[^.!?\\n*]|\\.(?=\\S)){0,300}?\\b(?:read|open|fetch|retrieve|load|access|visit|call|invoke|run|execute|query|look(?:s|ed|ing)? up|search|download|attach|paste|include|send|upload|use the \\w+ tool)(?:s|es|ed|d|ing)?\\b)(?:[^.!?\\n*]|\\.(?=\\S)){1,300}",
         "flags": "i"
       }
     },
@@ -296,6 +329,8 @@
     "modify-agent-config",
     "override-instructions",
     "role-hijack",
+    "abandon-task",
+    "required-step",
     "reveal-instructions",
     "unicode-tag-smuggling",
     "conceal-from-user",

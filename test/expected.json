@@ -69,7 +69,8 @@
     "rules": [
       "agent-imperative",
       "conceal-from-user",
-      "exfiltrate-secrets"
+      "exfiltrate-secrets",
+      "required-step"
     ]
   },
   "zero-width.txt": {

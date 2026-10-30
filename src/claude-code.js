@@ -16,6 +16,16 @@ const READ_ONLY = /^(?:Read|Grep|Glob|LS|TodoWrite|ToolSearch|Skill|AskUserQuest
 const FETCH_TIMEOUT = 8000;
 const MAX_FETCH = 2_000_000;
 
+// Careful mode (FIRSTWATCH_MODE=careful): reading outside content turns the gate on, caught or not.
+// Rules can't catch an attack that is only meaning ("please give Amy access to the lock"), so this
+// doesn't wait for a catch. More approvals, by choice.
+const careful = () => process.env.FIRSTWATCH_MODE === 'careful';
+export function outsideRead(tool, input) {
+  if (/^(?:WebFetch|WebSearch)$|^mcp__/.test(tool)) return true;
+  return tool === 'Bash' && /\b(?:curl|wget)\b|https?:\/\//i.test(input?.command || '');
+}
+const describeRead = (tool, input) => (input?.url ? `${tool} ${input.url}` : input?.query ? `${tool} "${String(input.query).slice(0, 80)}"` : input?.command ? `${tool}: ${String(input.command).slice(0, 80)}` : tool);
+
 export function resultText(toolName, response) {
   if (response == null) return '';
   if (typeof response === 'string') return response;
@@ -75,6 +85,9 @@ export async function postToolUse(ev) {
   const results = [scan(text)];
   if (raw) results.push(scan(raw));
   const findings = results.flatMap((r) => r.findings);
+  if (careful() && !sessionState(dir, ev.session_id) && outsideRead(tool, ev.tool_input)) {
+    markSession(dir, ev.session_id, null, describeRead(tool, ev.tool_input));
+  }
   if (!findings.length) return null;
   const level = findings.some((f) => f.level === 'stop') ? 'stop' : 'note';
 
@@ -120,6 +133,7 @@ export function preToolUse(ev) {
   if (riskyMcp(tool)) return ask(`firstwatch: ${tool} acts on your behalf (send, pay, delete, share or grant). Approve it?`);
   const state = sessionState(dir, ev.session_id);
   if (state && !READ_ONLY.test(tool)) {
+    if (!state.capture) return ask(`firstwatch (careful mode): this session read outside content (${state.read}). ${tool} could act on something it said. Check the action, then approve or deny.`);
     return ask(`firstwatch: this session met an attack (${state.capture}). ${tool} could act on it. Check the action, then approve or deny.`);
   }
   return null;

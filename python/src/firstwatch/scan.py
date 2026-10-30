@@ -6,6 +6,7 @@ don't, then runs the rules on each part. Mirrors src/scan.js in the Node package
 
 import base64
 import html
+import json
 import re
 
 from ._rules import AGENT_RE, BUILTIN, DISCUSSION_MIN, DISCUSSION_RE, HIDDEN_STYLE, RULES
@@ -39,8 +40,49 @@ def _inside(ranges, i):
     return any(a <= i < b for a, b in ranges)
 
 
+# JSON (most API and MCP tool results): scan the text values, not the JSON. Every value sits
+# inside double quotes, and quoted text reads as someone quoting an attack, which lowers a stop.
+# Values are joined in order, so a sentence addressed to an AI in one field still counts for the next.
+JSON_DEPTH = 4
+
+
+def _json_values(text, depth=0):
+    t = text.strip()
+    if depth >= JSON_DEPTH or t[:1] not in ("[", "{", '"'):
+        return None
+    try:
+        v = json.loads(t)
+    except ValueError:
+        return None
+    out = []
+
+    def walk(x):
+        if isinstance(x, str):
+            inner = _json_values(x, depth + 1)
+            out.extend(inner if inner is not None else [x])
+        elif isinstance(x, list):
+            for y in x:
+                walk(y)
+        elif isinstance(x, dict):
+            for k, val in x.items():
+                if len(k) > 20 and re.search(r"\s", k):
+                    out.append(k)
+                walk(val)
+
+    walk(v)
+    return out
+
+
 def segments(text):
     """Split input into segments: dicts with text, hidden, how, where, offset, quoted."""
+    values = _json_values(text)
+    if values is not None:
+        segs = _segments_of("\n".join(v for v in values if v))
+        return [{**x, "where": "JSON values" if x["where"] == "text" else x["where"] + " in JSON values"} for x in segs]
+    return _segments_of(text)
+
+
+def _segments_of(text):
     out = []
     for m in TAG_CHARS.finditer(text):
         decoded = "".join(chr(ord(c) - 0xE0000) for c in m.group(0))

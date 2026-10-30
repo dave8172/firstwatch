@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "firstwatch"
-version = "0.2.0"
+version = "0.3.0"
 description = "First line of defence for AI agents: spots attacks hidden in pages, files and tool results, and records each one as evidence in an open, OpenTelemetry-ready format with MITRE ATLAS and OWASP IDs. No dependencies."
 readme = "README.md"
 license = "MIT"

@@ -1,7 +1,7 @@
 {
   "name": "firstwatch",
   "owner": { "name": "dave8172" },
-  "metadata": { "description": "firstwatch: first line of defence for AI agents", "version": "0.2.0" },
+  "metadata": { "description": "firstwatch: first line of defence for AI agents", "version": "0.3.0" },
   "plugins": [
     {
       "name": "firstwatch",

@@ -7,7 +7,7 @@ import { redact, redactDeep } from './redact.js';
 import { ATLAS, OWASP, PRIORITY } from './rules.js';
 
 export const SPEC = 'firstwatch/0.1';
-export const VERSION = '0.2.0';
+export const VERSION = '0.3.0';
 const LEVELS = ['stop', 'note'];
 const OUTCOMES = ['blocked', 'followed', 'partial', 'unknown'];
 const CAUGHT_BY = ['hook', 'agent', 'scanner', 'owner'];
@@ -197,12 +197,13 @@ export function writeNote(rec, { dir = captureDir() } = {}) {
   return join(dir, 'notes.jsonl');
 }
 
-// Session state: once a session has seen a stop, outward actions need approval.
-export function markSession(dir, sessionId, folder) {
+// Session state: once a session has seen a stop (or, in careful mode, read outside content),
+// outward actions need approval. `read` names that outside content when there is no capture.
+export function markSession(dir, sessionId, folder, read = null) {
   if (!sessionId) return;
   const d = join(dir, '.sessions');
   mkdirSync(d, { recursive: true });
-  writeFileSync(join(d, `${slug(sessionId)}.json`), JSON.stringify({ since: isoLocal(), capture: folder }) + '\n');
+  writeFileSync(join(d, `${slug(sessionId)}.json`), JSON.stringify({ since: isoLocal(), capture: folder, ...(read ? { read } : {}) }) + '\n');
 }
 
 export function sessionState(dir, sessionId) {

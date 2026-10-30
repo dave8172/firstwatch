@@ -24,8 +24,41 @@ function safeChar(n) {
 
 const stripTags = (s) => decodeEntities(s.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
 
+// JSON (most API and MCP tool results): scan the text values, not the JSON. Every value sits
+// inside double quotes, and quoted text reads as someone quoting an attack, which lowers a stop.
+// Values are joined in order, so a sentence addressed to an AI in one field still counts for the next.
+const JSON_DEPTH = 4;
+
+function jsonValues(input, depth = 0) {
+  const t = input.trim();
+  if (depth >= JSON_DEPTH || !/^[[{"]/.test(t)) return null;
+  let v;
+  try { v = JSON.parse(t); } catch { return null; }
+  const out = [];
+  const walk = (x) => {
+    if (typeof x === 'string') out.push(...(jsonValues(x, depth + 1) ?? [x]));
+    else if (Array.isArray(x)) x.forEach(walk);
+    else if (x && typeof x === 'object') {
+      for (const [k, val] of Object.entries(x)) {
+        if (k.length > 20 && /\s/.test(k)) out.push(k);
+        walk(val);
+      }
+    }
+  };
+  walk(v);
+  return out;
+}
+
 // Split input into segments: { text, hidden, how[], where, offset, quoted }
 export function segments(input) {
+  const values = jsonValues(input);
+  if (values) {
+    return segmentsOf(values.filter(Boolean).join('\n')).map((x) => ({ ...x, where: x.where === 'text' ? 'JSON values' : `${x.where} in JSON values` }));
+  }
+  return segmentsOf(input);
+}
+
+function segmentsOf(input) {
   const out = [];
   const tags = [...input.matchAll(TAG_CHARS)];
   for (const m of tags) {

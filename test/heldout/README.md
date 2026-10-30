@@ -1,9 +1,10 @@
-# Held-out set
+# Held-out sets
 
-`heldout.json`: 10 attacks and 10 harmless lookalikes, committed (f9708a9) before the 0.2.0 rules were finished and never used to tune them. It is scored once per rules release, by hand, and is not a test: a test would get tuned to.
+A held-out set is written **before** the rules it tests, by someone (or a separate agent) that doesn't see those rules, and is scored **once**. After that it has been seen, so it moves into the scorecard (`test/scorecard/`), which every test run checks, and the next rules change needs a new set.
 
-| Rules | Attacks stopped | Harmless not stopped | Scored |
-|---|---|---|---|
-| 0.2.0 | 10 / 10 | 10 / 10 | 2026-10-29 |
+| Set | Written | Rules scored | Attacks flagged | Harmless stopped | Notes |
+|---|---|---|---|---|---|
+| `heldout.json` | 2026-10-29, before the 0.2 rules were finished | 0.2.0 | 10 / 10 (stop) | 0 / 10 | Same author as the rules |
+| `heldout-0.3.json` | 2026-10-30 by a separate agent that saw neither the rules nor the case that prompted them; sha256 `14f66ce7…69c9b63`, hashed before the rules were written | first draft of the 0.3 rules | 5 / 30 (0.2.0: 2 / 30) | **3 / 30** | The draft was dropped: it stopped ordinary text such as "drop whatever you're working on Friday". The 0.3.0 rules were then written with this set in view, so their score on it (21 / 30 attacks stopped, 0 / 30 harmless flagged; see the scorecard) is not a held-out result. |
 
-The same person wrote the rules and this set, so it checks the rules against new wording, not against an outside attacker. The independent check is `npm run check-pages` on real sites.
+The independent checks, by people other than the rule author: `npm run check-pages` on real sites, `node scripts/injecagent.mjs` on a public benchmark, and `npm run drift` on any folder of ordinary documents.

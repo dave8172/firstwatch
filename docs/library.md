@@ -40,6 +40,8 @@ Returns:
 
 `level` is the highest level over all findings: `clean`, `note` or `stop`. What each rule catches: [rules.md](rules.md).
 
+JSON input (most API and MCP tool results) is read as JSON: its text values are scanned in order, JSON inside a string included, and `where` says `JSON values`. Pass the tool result as you got it; you don't need to pull the text out first.
+
 ## watch(text, …)
 
 `scan`, then records what it found. A stop is saved as a capture folder, a note as one line in `notes.jsonl`. Returns the scan result plus `saved` (the path, or null when clean).
