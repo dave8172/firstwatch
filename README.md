@@ -10,6 +10,8 @@ It watches what your agent reads, records every attack as evidence, and asks you
 <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue"></a>
 </p>
 
+<p align="center"><img src="docs/scan-demo.gif" width="800" alt="firstwatch checks a pricing page in the browser. A line hidden in tiny white text tells the agent to send the user's API key, and firstwatch stops it. Ordinary API docs come back clean."></p>
+
 <p align="center"><b><a href="https://quirkyagents.com/firstwatch/">Try it in your browser</a></b>: paste a page or an email, and the real scanner checks it. Nothing leaves the page.<br>
 For Claude Code, agents with skills (Codex, Cursor, Gemini CLI), and agents you build (LangChain, CrewAI, OpenAI Agents SDK, plain Python or Node).<br>
 Using it at work? <a href="https://github.com/dave8172/firstwatch/discussions/new?category=show-and-tell">Tell us</a>.</p>
