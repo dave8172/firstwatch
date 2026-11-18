@@ -43,4 +43,4 @@ Public repo. This file ships with it: nothing personal, no project names, no mac
 
 ## Status
 
-0.3.0, 2026-10-30. Releases go out through GitHub Actions trusted publishing on both registries.
+**Maintenance only** since 2026-11-18: issues, bugs and the plugin listing; no new features or rules unless real users ask. 0.3.0, 2026-10-30. Releases go out through GitHub Actions trusted publishing on both registries.
