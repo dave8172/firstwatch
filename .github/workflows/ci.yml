@@ -43,8 +43,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python: ["3.10", "3.11", "3.12", "3.13"]
         include:
+          # ubuntu-latest (26.04) ships no Python 3.9; the package still supports it.
+          - { os: ubuntu-24.04, python: "3.9" }
           - { os: windows-latest, python: "3.12" }
     steps:
       - uses: actions/checkout@v4
